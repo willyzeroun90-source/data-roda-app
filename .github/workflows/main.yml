@@ -8,19 +8,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Create APP Folder
+      - name: Zip File
         run: |
           mkdir data-roda-app
           cp indeks.html data-roda-app/index.html || cp index.html data-roda-app/index.html
-
-      - name: Zip APP
-        run: |
           zip -r data-roda-app.zip data-roda-app
 
-      - name: Upload APP
+      - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: data-roda-app
