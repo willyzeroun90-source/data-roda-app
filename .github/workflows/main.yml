@@ -8,43 +8,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Install Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
+      - name: Create APP Folder
+        run: |
+          mkdir data-roda-app
+          cp indeks.html data-roda-app/index.html || cp index.html data-roda-app/index.html
 
-    - name: Install Capacitor
-      run: |
-        npm install
-        npm install @capacitor/core @capacitor/cli @capacitor/android
+      - name: Zip APP
+        run: |
+          zip -r data-roda-app.zip data-roda-app
 
-    - name: Create package.json
-      run: |
-        cat > package.json << 'EOF'
-        {
-          "name": "data-roda",
-          "version": "1.0.0",
-          "scripts": {
-            "build": "echo build"
-          }
-        }
-        EOF
-
-    - name: Setup Android
-      uses: android-actions/setup-android@v3
-
-    - name: Build APK
-      run: |
-        mkdir apk
-        cp index.html apk/index.html
-        cd apk
-        zip -r DATA-RODA-APK.zip .
-
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: DATA-RODA-APK
-        path: apk/DATA-RODA-APK.zip
+      - name: Upload APP
+        uses: actions/upload-artifact@v4
+        with:
+          name: data-roda-app
+          path: data-roda-app.zip
