@@ -10,14 +10,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Zip File
-        run: |
-          mkdir data-roda-app
-          cp indeks.html data-roda-app/index.html || cp index.html data-roda-app/index.html
-          zip -r data-roda-app.zip data-roda-app
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
 
-      - name: Upload
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build Debug APK
+        run: gradle assembleDebug
+
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: data-roda-app
-          path: data-roda-app.zip
+          name: data-roda-app-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
