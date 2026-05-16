@@ -10,7 +10,7 @@ import android.webkit.WebViewClient;
 
 public class MainActivity extends Activity {
 
-    private WebView webView;
+    WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,6 @@ public class MainActivity extends Activity {
         webView.getSettings().setAllowFileAccess(true);
         webView.getSettings().setAllowContentAccess(true);
 
-        // Tangani link WhatsApp dan link external
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
@@ -33,29 +32,38 @@ public class MainActivity extends Activity {
 
                 String url = request.getUrl().toString();
 
-                // Jika link WhatsApp
+                // WhatsApp
                 if (url.startsWith("whatsapp://")) {
+
                     try {
+
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setData(Uri.parse(url));
                         intent.setPackage("com.whatsapp");
+
                         startActivity(intent);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+
                     return true;
                 }
 
-                // Jika link telpon
+                // Telepon
                 if (url.startsWith("tel:")) {
+
                     Intent intent = new Intent(Intent.ACTION_DIAL);
                     intent.setData(Uri.parse(url));
+
                     startActivity(intent);
+
                     return true;
                 }
 
-                // Jika link biasa tetap buka di WebView
+                // Link biasa
                 view.loadUrl(url);
+
                 return true;
             }
         });
@@ -67,6 +75,7 @@ public class MainActivity extends Activity {
     // Tombol back
     @Override
     public void onBackPressed() {
+
         if (webView.canGoBack()) {
             webView.goBack();
         } else {
